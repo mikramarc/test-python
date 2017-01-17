@@ -18,14 +18,8 @@ class Data:
 
         my_file.close()
 
-    def save_file(self, path):
-        formatted_data = ["x   y\n"]
-        for x, y in zip(self.x_data, self.y_data):
-            formatted_data += [str(x) + " " + str(y) + "\n"]
-
-        f = open(path, "w")
-        f.writelines(formatted_data)
-        f.close()
+    def save_data(self, path):
+        write_to_file(self.x_data, self.y_data, path)
 
     def detect_jumps(self, threshold):
         for i in range(len(self.y_data)-1):
@@ -35,12 +29,22 @@ class Data:
                 self.jump_position = np.append(self.jump_position, i)
 
 
+def write_to_file(x_data, y_data, path):
+    formatted_data = ["x   y\n"]
+    for x, y in zip(x_data, y_data):
+        formatted_data += [str(x) + " " + str(y) + "\n"]
+
+    f = open(path, "w")
+    f.writelines(formatted_data)
+    f.close()
+
+
 sample_data = Data()
 sample_data.read_file('sample.txt')
 sample_data.detect_jumps(1)
 
 print sample_data.jump_position
 
-sample_data.save_file('results.txt')
+sample_data.save_data('results.txt')
 
 
