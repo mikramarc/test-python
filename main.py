@@ -1,23 +1,24 @@
 import numpy as np
 
 
-def read_file():
-    my_file = open('sample.txt', 'r')
-    x = np.array([])
-    y = np.array([])
+class Data:
+    x_data = np.array([])
+    y_data = np.array([])
 
-    next(my_file)
-    for line in my_file:
-        line_list = line.split()
-        x = np.append(x, float(line_list[0]))
-        y = np.append(y, float(line_list[1]))
+    def read_file(self, path):
+        my_file = open(path, 'r')
 
-    my_file.close()
-    return x, y
+        next(my_file)
+        for line in my_file:
+            line_list = line.split()
+            self.x_data = np.append(self.x_data, float(line_list[0]))
+            self.y_data = np.append(self.y_data, float(line_list[1]))
 
-x_data, y_data = read_file()
-print x_data
-print y_data
-print type(x_data)
+        my_file.close()
+
+sample_data = Data()
+sample_data.read_file('sample.txt')
+print sample_data.x_data
+print sample_data.y_data
 
 
