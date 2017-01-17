@@ -18,8 +18,9 @@ class Data:
 
         my_file.close()
 
-    def save_data(self, path):
-        write_to_file(self.x_data, self.y_data, path)
+    def save_data(self):
+        write_to_file(self.x_data, self.y_data, 'results.txt')
+        write_to_file(self.x_data, self.rate_change, 'change.txt')
 
     def detect_jumps(self, threshold):
         for i in range(len(self.y_data)-1):
@@ -45,6 +46,6 @@ sample_data.detect_jumps(1)
 
 print sample_data.jump_position
 
-sample_data.save_data('results.txt')
+sample_data.save_data()
 
 
