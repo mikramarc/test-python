@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 
 class Data:
@@ -94,6 +95,14 @@ def low_pass_filter(data, alpha):
 
     return data_filtered
 
+def logistic_function(min_val, max_val, num_of_samples, curve_steepness):
+    arguments = np.linspace(-3, 3, num = num_of_samples)
+    result = np.array([])
+
+    for i in range(0, num_of_samples):
+        result = np.append(result, (max_val-min_val)/(1+math.exp(-curve_steepness*arguments[i]))+min_val)
+
+    return result
 
 def write_to_file(x_data, y_data, path):
     formatted_data = ["x   y\n"]
