@@ -53,6 +53,17 @@ def average_filter(data, n):
     return data_filtered
 
 
+def low_pass_filter(data, alpha):
+    data_filtered = np.array([])
+    data_filtered = np.append(data_filtered, data[0])
+
+    for i in range(1, len(data)):
+        data_filtered = np.append(data_filtered, data_filtered[i-1]
+                                  + alpha*(data[i]-data_filtered[i-1]))
+
+    return data_filtered
+
+
 def write_to_file(x_data, y_data, path):
     formatted_data = ["x   y\n"]
     for x, y in zip(x_data, y_data):
@@ -74,6 +85,6 @@ sample_data.detect_jumps(1)
 
 sample_data.save_data()
 
-sample_data.y_data = average_filter(sample_data.y_data, 30)
+sample_data.y_data = low_pass_filter(sample_data.y_data, 0.04)
 
 plot(sample_data.x_data, sample_data.y_data)
