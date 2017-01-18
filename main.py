@@ -31,6 +31,28 @@ class Data:
                 self.jump_position = np.append(self.jump_position, i)
 
 
+def average_filter(data, n):
+    num_of_samples = len(data)
+    data_filtered = np.zeros(num_of_samples)
+
+    for i in range(n):
+        for j in range(-i, i+1):
+            data_filtered[i] += data[i+j]
+        data_filtered[i] /= 2*i+1
+
+    for i in range(n, num_of_samples-n):
+        for j in range(-n, n+1):
+            data_filtered[i] += data[i+j]
+        data_filtered[i] /= 2*n+1
+
+    for i in range(num_of_samples-n, num_of_samples):
+        for j in range(-(num_of_samples-(i+1)), (num_of_samples-(i+1))+1):
+            data_filtered[i] += data[i+j]
+        data_filtered[i] /= 2*(num_of_samples-(i+1))+1
+
+    return data_filtered
+
+
 def write_to_file(x_data, y_data, path):
     formatted_data = ["x   y\n"]
     for x, y in zip(x_data, y_data):
@@ -52,6 +74,6 @@ sample_data.detect_jumps(1)
 
 sample_data.save_data()
 
-plot(sample_data.x_data[1:], sample_data.rate_change)
+sample_data.y_data = average_filter(sample_data.y_data, 30)
 
-
+plot(sample_data.x_data, sample_data.y_data)
