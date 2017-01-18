@@ -31,12 +31,27 @@ class Data:
                 self.jump_position = np.append(self.jump_position, i)
 
     def filter_data(self, mode):
-        if mode == 1:
+        if mode == 'average':
             self.y_data = average_filter(self.y_data, 30)
-        elif mode == 1:
+        elif mode == 'lowpass':
             self.y_data = low_pass_filter(self.y_data, 0.04)
         else:
-            print "Wrond mode chosen. Data not filtered"
+            print "Wrong mode chosen. Data not filtered"
+
+    def delete_jumps(self, warp_window_size, mode):
+        data_around_jump = np.zeros(2*warp_window_size+1)
+        number_of_jumps = len(self.jump_position)
+
+        for k in range(0, number_of_jumps):
+            j = int(self.jump_position[k]-warp_window_size)
+            for i in range(0, 2*warp_window_size+1):
+                data_around_jump[i] = self.y_data[j]
+                j += 1
+
+
+
+
+
 
 
 def average_filter(data, n):
@@ -91,9 +106,10 @@ sample_data = Data()
 sample_data.read_file('sample.txt')
 sample_data.detect_jumps(1)
 
+#plot(sample_data.x_data, sample_data.y_data)
+sample_data.filter_data('average')
+#plot(sample_data.x_data, sample_data.y_data)
+
+sample_data.delete_jumps(100, 1)
+
 sample_data.save_data()
-
-plot(sample_data.x_data, sample_data.y_data)
-sample_data.filter_data(1)
-plot(sample_data.x_data, sample_data.y_data)
-
