@@ -30,6 +30,14 @@ class Data:
             if self.rate_change[i] > threshold:
                 self.jump_position = np.append(self.jump_position, i)
 
+    def filter_data(self, mode):
+        if mode == 1:
+            self.y_data = average_filter(self.y_data, 30)
+        elif mode == 1:
+            self.y_data = low_pass_filter(self.y_data, 0.04)
+        else:
+            print "Wrond mode chosen. Data not filtered"
+
 
 def average_filter(data, n):
     num_of_samples = len(data)
@@ -85,6 +93,7 @@ sample_data.detect_jumps(1)
 
 sample_data.save_data()
 
-sample_data.y_data = low_pass_filter(sample_data.y_data, 0.04)
-
 plot(sample_data.x_data, sample_data.y_data)
+sample_data.filter_data(1)
+plot(sample_data.x_data, sample_data.y_data)
+
