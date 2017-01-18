@@ -98,7 +98,7 @@ def low_pass_filter(data, alpha):
 
 
 def logistic_function(min_val, max_val, num_of_samples, curve_steepness):
-    arguments = np.linspace(-3, 3, num = num_of_samples)
+    arguments = np.linspace(-3, 3, num=num_of_samples)
     result = np.array([])
 
     for i in range(0, num_of_samples):
@@ -117,9 +117,7 @@ def write_to_file(x_data, y_data, path):
     f.close()
 
 
-def plot(x_data, y_data):
-    plt.plot(x_data, y_data)
-    plt.show()
+
 
 
 sample_data = Data()
@@ -129,8 +127,13 @@ sample_data.detect_jumps(1)
 
 sample_data.filter_data('average')
 
-plot(sample_data.x_data, sample_data.y_data)
-sample_data.delete_jumps(100, 'logistic')
-plot(sample_data.x_data, sample_data.y_data)
+plt.figure(1)
+plt.plot(sample_data.x_data, sample_data.y_data)
 
+sample_data.delete_jumps(100, 'logistic')
+
+plt.figure(2)
+plt.plot(sample_data.x_data, sample_data.y_data)
+
+plt.show()
 sample_data.save_data()
