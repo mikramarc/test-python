@@ -43,15 +43,23 @@ class Data:
         number_of_jumps = len(self.jump_position)
 
         for k in range(0, number_of_jumps):
+
             j = int(self.jump_position[k]-warp_window_size)
             for i in range(0, 2*warp_window_size+1):
                 data_around_jump[i] = self.y_data[j]
                 j += 1
 
+            if mode == 'filter':
+                data_around_jump = average_filter(data_around_jump, 35)
+            elif mode == 'logistic':
+                print "logistic mode"
+            else:
+                print "Wrong mode. Jumps were not deleted"
 
-
-
-
+            j = int(self.jump_position[k] - warp_window_size)
+            for i in range(0, 2 * warp_window_size + 1):
+                self.y_data[j] = data_around_jump[i]
+                j += 1
 
 
 def average_filter(data, n):
@@ -106,10 +114,11 @@ sample_data = Data()
 sample_data.read_file('sample.txt')
 sample_data.detect_jumps(1)
 
-#plot(sample_data.x_data, sample_data.y_data)
-sample_data.filter_data('average')
-#plot(sample_data.x_data, sample_data.y_data)
 
-sample_data.delete_jumps(100, 1)
+sample_data.filter_data('average')
+
+plot(sample_data.x_data, sample_data.y_data)
+sample_data.delete_jumps(100, 'filter')
+plot(sample_data.x_data, sample_data.y_data)
 
 sample_data.save_data()
