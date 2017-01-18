@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Data:
@@ -40,12 +41,17 @@ def write_to_file(x_data, y_data, path):
     f.close()
 
 
+def plot(x_data, y_data):
+    plt.plot(x_data, y_data)
+    plt.show()
+
+
 sample_data = Data()
 sample_data.read_file('sample.txt')
 sample_data.detect_jumps(1)
 
-print sample_data.jump_position
-
 sample_data.save_data()
+
+plot(sample_data.x_data[1:], sample_data.rate_change)
 
 
