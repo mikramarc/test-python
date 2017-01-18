@@ -53,7 +53,8 @@ class Data:
             if mode == 'filter':
                 data_around_jump = average_filter(data_around_jump, 35)
             elif mode == 'logistic':
-                print "logistic mode"
+                data_around_jump = logistic_function(data_around_jump[0], data_around_jump[-1],
+                                                     len(data_around_jump), 2)
             else:
                 print "Wrong mode. Jumps were not deleted"
 
@@ -95,6 +96,7 @@ def low_pass_filter(data, alpha):
 
     return data_filtered
 
+
 def logistic_function(min_val, max_val, num_of_samples, curve_steepness):
     arguments = np.linspace(-3, 3, num = num_of_samples)
     result = np.array([])
@@ -103,6 +105,7 @@ def logistic_function(min_val, max_val, num_of_samples, curve_steepness):
         result = np.append(result, (max_val-min_val)/(1+math.exp(-curve_steepness*arguments[i]))+min_val)
 
     return result
+
 
 def write_to_file(x_data, y_data, path):
     formatted_data = ["x   y\n"]
@@ -127,7 +130,7 @@ sample_data.detect_jumps(1)
 sample_data.filter_data('average')
 
 plot(sample_data.x_data, sample_data.y_data)
-sample_data.delete_jumps(100, 'filter')
+sample_data.delete_jumps(100, 'logistic')
 plot(sample_data.x_data, sample_data.y_data)
 
 sample_data.save_data()
