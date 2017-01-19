@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 
 
-class Data:
+class Data(object):
     x_data = np.array([])
     y_data = np.array([])
     rate_change = np.array([])
@@ -37,7 +37,7 @@ class Data:
         elif mode == 'lowpass':
             self.y_data = low_pass_filter(self.y_data, 0.04)
         else:
-            print "Wrong mode chosen. Data not filtered"
+            print "Wrong mode. Data not filtered"
 
     def delete_jumps(self, warp_window_size, mode):
         data_around_jump = np.zeros(2*warp_window_size+1)
@@ -117,23 +117,20 @@ def write_to_file(x_data, y_data, path):
     f.close()
 
 
+if __name__ == "__main__":
 
+    sample_data = Data()
+    sample_data.read_file('sample.txt')
+    sample_data.detect_jumps(1)
+    sample_data.filter_data('average')
 
+    plt.figure(1)
+    plt.plot(sample_data.x_data, sample_data.y_data)
 
-sample_data = Data()
-sample_data.read_file('sample.txt')
-sample_data.detect_jumps(1)
+    sample_data.delete_jumps(100, 'logistic')
 
+    plt.figure(2)
+    plt.plot(sample_data.x_data, sample_data.y_data)
 
-sample_data.filter_data('average')
-
-plt.figure(1)
-plt.plot(sample_data.x_data, sample_data.y_data)
-
-sample_data.delete_jumps(100, 'logistic')
-
-plt.figure(2)
-plt.plot(sample_data.x_data, sample_data.y_data)
-
-plt.show()
-sample_data.save_data()
+    plt.show()
+    sample_data.save_data()
