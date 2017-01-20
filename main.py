@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import itertools as it
 
 
 class Data(object):
@@ -45,10 +46,9 @@ class Data(object):
 
         for k in range(0, number_of_jumps):
 
-            j = int(self.jump_position[k]-warp_window_size)
-            for i in range(0, 2*warp_window_size+1):
+            for i, j in zip(range(0, 2*warp_window_size+1),
+                            it.count(int(self.jump_position[k]-warp_window_size))):
                 data_around_jump[i] = self.y_data[j]
-                j += 1
 
             if mode == 'filter':
                 data_around_jump = average_filter(data_around_jump, 35)
@@ -58,10 +58,9 @@ class Data(object):
             else:
                 print "Wrong mode. Jumps were not deleted"
 
-            j = int(self.jump_position[k] - warp_window_size)
-            for i in range(0, 2 * warp_window_size + 1):
+            for i, j in zip(range(0, 2 * warp_window_size + 1),
+                            it.count(int(self.jump_position[k] - warp_window_size))):
                 self.y_data[j] = data_around_jump[i]
-                j += 1
 
 
 def average_filter(data, n):
