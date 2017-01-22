@@ -10,6 +10,10 @@ class Data(object):
     rate_change = np.array([])
     jump_position = np.array([])
 
+    def __init__(self):
+        self.is_filtered = False
+        self.is_warped = False
+
     def read_file(self, path):
         my_file = open(path, 'r')
 
@@ -35,8 +39,10 @@ class Data(object):
     def filter_data(self, mode):
         if mode == 'average':
             self.y_data = average_filter(self.y_data, 30)
+            self.is_filtered = True
         elif mode == 'lowpass':
             self.y_data = low_pass_filter(self.y_data, 0.04)
+            self.is_filtered = True
         else:
             print "Wrong mode. Data not filtered"
 
@@ -52,9 +58,11 @@ class Data(object):
 
             if mode == 'filter':
                 data_around_jump = average_filter(data_around_jump, 35)
+                self.is_warped = True
             elif mode == 'logistic':
                 data_around_jump = logistic_function(data_around_jump[0], data_around_jump[-1],
                                                      len(data_around_jump), 2)
+                self.is_warped = True
             else:
                 print "Wrong mode. Jumps were not deleted"
 
@@ -133,3 +141,4 @@ if __name__ == "__main__":
 
     plt.show()
     sample_data.save_data()
+
